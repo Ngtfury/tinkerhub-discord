@@ -1,7 +1,6 @@
 import discord.member
 import discord
 from discord.ext import commands
-from bot import TestBot
 from discord.ext import tasks
 import utils.api as api
 from cogs.interactions import ModalView1, ModalView2
@@ -9,7 +8,9 @@ from cogs.interactions import ModalView1, ModalView2
 class BasicCommands(commands.Cog):
     def __init__(self, client) -> None:
         self.client = client
-        self.bot: TestBot = client
+        self.bot = client
+        self.bot.venue_task = self.started_venues_task
+        self.bot._12hr_task = self._12hr_venues_task
 
     @commands.command(name='synctree')
     async def synctree(self, ctx, guild = None):
@@ -27,11 +28,28 @@ class BasicCommands(commands.Cog):
     @tasks.loop(minutes=30)
     async def started_venues_task(self):
         started_venues = api.get_started_venues()
-        if started_venues:
+        if started_venues == []:
+            return
+        if not started_venues == []:
             for participants in started_venues:
-                discordid = int(participants['did'])
+                discordid = int(participants['dId'])
+                teamid = int(participants['teamId'])
                 usr = self.bot.get_user(discordid)
-                await usr.send('hi', view=ModalView2(usr))
+                d = api.get_msgs(teamid, self.bot)
+                if not d == []:
+                    continue
+                em = discord.Embed(
+                color=0x2F3136,
+                description="Please submit your response here!"
+                )
+                msg = await usr.send(embed=em, view=ModalView2(usr))
+                json_ = {
+                    'team_id': teamid,
+                    'msg_ids': msg.id,
+                    'channel_id': msg.channel.id
+                }
+                api.post_to_api_msg(json_)
+                #update to api
 
 
                 #cname = f'venue-{venues['venueId']}'
@@ -48,7 +66,20 @@ class BasicCommands(commands.Cog):
             for participants in _12hr_venues:
                 discordid = int(participants['did'])
                 usr = self.bot.get_user(discordid)
-                msgid = await usr.send('hi', view=ModalView1(usr))
+                teamid = int(participants['teamId'])
+
+                em = discord.Embed(
+                color=0x2F3136,
+                description="Please submit your response here!"
+                )
+                msg = await usr.send(embed=em, view=ModalView1(usr))
+                json_ = {
+                    'msgId': msg.id,
+                    'teamId': teamid
+                }
+                api.post_to_api_msg(json_)
+
+                #update to api
                 #cname = f'venue-{venues['venueId']}'
                 #channel:discord.TextChannel = discord.utils.get(c.channels, cname)
                 #if channel.last_message.content == "@everyone Hey its been above 12 hours":

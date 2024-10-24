@@ -25,4 +25,9 @@ class TestBot(commands.Bot):
     async def on_ready(self):
         self.load_cache()
         await self.load_extensions()
-        print("Bot ready.")
+        print("Starting loops.")
+        self.venue_task.start()
+        self._12hr_task.start()
+        print('Loops Started')
+        print('Bot ready.')
+
