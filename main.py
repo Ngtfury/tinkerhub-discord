@@ -1,6 +1,6 @@
 from bot import TestBot
 from discord import app_commands
-
+import os
 
 bot = TestBot()
 
@@ -12,5 +12,6 @@ async def reloadext(ctx, ext):
     except Exception as e:
         await ctx.send(e)
 
-bot.run("")
+token = os.getenv("TOKEN")
+bot.run(token)
 

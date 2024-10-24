@@ -104,9 +104,23 @@ class Update1SubmissionModal(discord.ui.Modal):
         #edit original response to submitted
         em = discord.Embed(
             color=0x2F3136,
-            description="You have already submitted."
+            description=f"""Hey Maker, {self.oldinteraction.user.mention}
+Your team member already shared your latest team update 🫰 
+Keep building"""
         )
-        await self.oldinteraction.edit_original_response(embed=em, view=None)
+        v = discord.ui.View()
+        v.add_item(
+            discord.ui.Button(
+                style=discord.ButtonStyle.gray,
+                disabled=True,
+                label="Submitted"
+            )
+        )
+        await self.oldinteraction.edit_original_response(
+            embed=em,
+            view = v
+            
+        )
 
 class Update2SubmissionModal(discord.ui.Modal):
     stacks = discord.ui.TextInput(
@@ -145,8 +159,8 @@ class Update2SubmissionModal(discord.ui.Modal):
                 "Challenges": str(self.challenges)
             }
         }
-
-        await interaction.response.send_message(str(e))
+        #post to api
+        #await interaction.response.send_message(str(e))
         #edit original response to submitted
         await self.oldinteraction.edit_original_response(view=None)
 
