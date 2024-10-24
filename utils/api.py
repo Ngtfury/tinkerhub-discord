@@ -36,3 +36,6 @@ def get_4hr_venues():
 
     return _12hrs
 
+
+def post_to_api(json):
+    requests.post('http://18.219.158.1/usr_resp/add', json)

@@ -1,5 +1,4 @@
 from bot import TestBot
-from discord import app_commands
 import os
 
 bot = TestBot()

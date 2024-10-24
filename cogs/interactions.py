@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from discord.utils import MISSING
+import utils.api as api
+
 
 class ModalView1(discord.ui.View):
     def __init__(self, ctx):
@@ -10,7 +12,7 @@ class ModalView1(discord.ui.View):
     @discord.ui.button(
         style=discord.ButtonStyle.green,
         label="Submit",
-        custom_id="submit1"
+        custom_id="submit1",
     )
     async def submit_bttn(self, interaction: discord.Interaction, button: discord.ui.Button):
         return
@@ -99,9 +101,7 @@ class Update1SubmissionModal(discord.ui.Modal):
             }
         }
 
-        #update to api
-        await interaction.response.send_message(str(e))
-        #edit original response to submitted
+        api.post_to_api(e)
         em = discord.Embed(
             color=0x2F3136,
             description=f"""Hey Maker, {self.oldinteraction.user.mention}
@@ -116,11 +116,14 @@ Keep building"""
                 label="Submitted"
             )
         )
-        await self.oldinteraction.edit_original_response(
-            embed=em,
-            view = v
-            
-        )
+        await interaction.response.edit_message(embed=em, view=v)
+        #edit original response to submitted
+
+        #await self.oldinteraction.edit_original_response(
+        #    embed=em,
+        #    view = v
+        #    
+        #)
 
 class Update2SubmissionModal(discord.ui.Modal):
     stacks = discord.ui.TextInput(
@@ -159,7 +162,7 @@ class Update2SubmissionModal(discord.ui.Modal):
                 "Challenges": str(self.challenges)
             }
         }
-        #post to api
+        api.post_to_api(e)
         #await interaction.response.send_message(str(e))
         #edit original response to submitted
         await self.oldinteraction.edit_original_response(view=None)
