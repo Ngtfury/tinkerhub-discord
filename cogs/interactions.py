@@ -15,7 +15,7 @@ class ModalView1(discord.ui.View):
         custom_id="submit1",
     )
     async def submit_bttn(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_modal(Update2SubmissionModal(interaction, self.bot, self.mem['teamId'], self.mem['teamName'], self.mem['venueId']))
+        return
     
 class ModalView2(discord.ui.View):
     def __init__(self, ctx):
@@ -61,8 +61,7 @@ class InteractionHandler(commands.Cog):
                 await interaction.response.edit_message(view=None)
                 return
             if custom_id == 'submit1':
-                return
-                #await interaction.response.send_modal(Update2SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName'], mem['venueId']))
+                await interaction.response.send_modal(Update2SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName'], mem['venueId']))
             else:
                 await interaction.response.send_modal(Update1SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName'], mem['venueId']))
             return
