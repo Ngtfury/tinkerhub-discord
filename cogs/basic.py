@@ -34,7 +34,10 @@ class BasicCommands(commands.Cog):
         if not started_venues == []:
             for participants in started_venues:
                 #print(participants)
-                discordid = int(participants['dId'])
+                ddd = participants['dId']
+                if not ddd:
+                    continue
+                discordid = int(ddd)
                 teamid = int(participants['teamId'])
                 usr = self.bot.get_user(discordid)
                 d = api.get_msgs(teamid, self.bot)
