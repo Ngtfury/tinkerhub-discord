@@ -32,6 +32,7 @@ class BasicCommands(commands.Cog):
             return
         if not started_venues == []:
             for participants in started_venues:
+                print(participants)
                 discordid = int(participants['dId'])
                 teamid = int(participants['teamId'])
                 usr = self.bot.get_user(discordid)
@@ -64,7 +65,7 @@ class BasicCommands(commands.Cog):
         _12hr_venues = api.get_4hr_venues()
         if _12hr_venues:
             for participants in _12hr_venues:
-                discordid = int(participants['did'])
+                discordid = int(participants['dId'])
                 usr = self.bot.get_user(discordid)
                 teamid = int(participants['teamId'])
 
@@ -74,8 +75,9 @@ class BasicCommands(commands.Cog):
                 )
                 msg = await usr.send(embed=em, view=ModalView1(usr))
                 json_ = {
-                    'msgId': msg.id,
-                    'teamId': teamid
+                    'team_id': teamid,
+                    'msg_ids': msg.id,
+                    'channel_id': msg.channel.id
                 }
                 api.post_to_api_msg(json_)
 
