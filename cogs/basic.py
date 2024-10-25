@@ -46,7 +46,8 @@ class BasicCommands(commands.Cog):
                     continue
                 em = discord.Embed(
                 color=0x2F3136,
-                description="Please submit your response here!"
+                description="""🚨 Hey Useless Makers!
+Quick check before you build - we need one person from your team to fill this form about your wonderfully useless project!"""
                 )
                 #print('done1')
                 msg = await usr.send(embed=em, view=ModalView2(usr))
@@ -84,7 +85,8 @@ class BasicCommands(commands.Cog):
                     return
                 em = discord.Embed(
                 color=0x2F3136,
-                description="Please submit your response here!"
+                description="""🚨 Hey Useless Makers!
+Quick check before you build - we need one person from your team to fill this form about your wonderfully useless project!"""
                 )
                 msg = await usr.send(embed=em, view=ModalView1(participants))
                 json_ = {

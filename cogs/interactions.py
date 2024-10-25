@@ -36,16 +36,18 @@ class InteractionHandler(commands.Cog):
 
     @commands.command(name='sendmodal')
     @commands.is_owner()
-    async def sendmodal(self, ctx, index: int):
+    async def sendmodal(self, ctx, index: int, user: discord.Member):
         em = discord.Embed(
             color=0x2F3136,
-            description="Please submit your response here!"
+            description="""🚨 Hey Useless Makers!
+Quick check before you build - we need one person from your team to fill this form about your wonderfully useless project!"""
         )
+        usr = api.get_member_from_did(user.id)
         if index == 1:
-            await ctx.send(view = ModalView1(ctx), embed=em)
+            await usr.send(view = ModalView1(ctx), embed=em)
             return
         else:
-            await ctx.send(view = ModalView2(ctx), embed=em)
+            await usr.send(view = ModalView2(ctx), embed=em)
             return
 
     @commands.Cog.listener('on_interaction')
