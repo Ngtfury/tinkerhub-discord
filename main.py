@@ -14,5 +14,5 @@ async def reloadext(ctx, ext):
         await ctx.send(e)
 
 token = os.getenv("TOKEN")
-bot.run(token")
+bot.run(token)
 
