@@ -72,18 +72,18 @@ Quick check before you build - we need one person from your team to fill this fo
 
 #submission modals
 class Update1SubmissionModal(discord.ui.Modal):
-    teamid = discord.ui.TextInput(
-        label="Team ID",
-        style=discord.TextStyle.short,
-        custom_id="teamid",
-        placeholder="Share your team id."
-    )
-    venueid = discord.ui.TextInput(
-        label="Venue ID",
-        style=discord.TextStyle.short,
-        custom_id="venueid",
-        placeholder="Share your venue ID."
-    )
+    #teamid = discord.ui.TextInput(
+    #    label="Team ID",
+    #    style=discord.TextStyle.short,
+    #    custom_id="teamid",
+    #    placeholder="Share your team id."
+    #)
+    #venueid = discord.ui.TextInput(
+    #    label="Venue ID",
+    #    style=discord.TextStyle.short,
+    #    custom_id="venueid",
+    #    placeholder="Share your venue ID."
+    #)
     projectname = discord.ui.TextInput(
         label="Project Name",
         style=discord.TextStyle.short,
@@ -111,19 +111,7 @@ class Update1SubmissionModal(discord.ui.Modal):
 
     async def on_submit(self, interaction: discord.Interaction):
 
-        e = {
-            "TeamID": str(self.teamid),
-            "SubmittedBy": interaction.user.display_name,
-            "UpdateType": "Status 1",
-            "Content": {
-                "ProjectName": str(self.projectname),
-                "ProjectDescription": str(self.projectdescription),
-                "ProjectType": str(self.projecttype)
-            },
-            "venue_id": str(self.venue_id)
-        }
 
-        api.post_to_api_usr(e)
         em1 = discord.Embed(
             color=0x2F3136,
             description=f"""Hey Maker, {self.oldinteraction.user.mention}
@@ -146,7 +134,23 @@ Keep building"""
         )
         await interaction.response.edit_message(embed=em1, view=v)
         #edit other user messages
+        mem = api.get_member_from_did(interaction.user.id)
+        teamid = mem['teamId']
+        venueid = mem['venueId']
+        e = {
+            "TeamID": str(teamid),
+            "SubmittedBy": interaction.user.display_name,
+            "UpdateType": "Status 2",
+            "Content": {
+                "Stacks": str(self.stacks),
+                "KnowledgeLevel": str(self.knowledgelevel),
+                "Challenges": str(self.challenges)
+            },
+            "venue_id": str(venueid)
+        }
+        #edit other user messages
         msgs = api.get_msgs(self.teamid, self.bot)
+        api.post_to_api_usr(e)
         if msgs:
             for msg in msgs:
                 #await msg.edit(embed=em, view=v)
@@ -200,7 +204,7 @@ class Update2SubmissionModal(discord.ui.Modal):
             },
             "venue_id": str(self.venue_id)
         }
-        api.post_to_api_usr(e)
+
         #await interaction.response.send_message(str(e))
         #edit original response to submitted
         em1 = discord.Embed(
@@ -224,8 +228,23 @@ Keep building"""
             )
         )
         await interaction.response.edit_message(embed=em1, view=v)
+        mem = api.get_member_from_did(interaction.user.id)
+        teamid = mem['teamId']
+        venueid = mem['venueId']
+        e = {
+            "TeamID": str(teamid),
+            "SubmittedBy": interaction.user.display_name,
+            "UpdateType": "Status 2",
+            "Content": {
+                "Stacks": str(self.stacks),
+                "KnowledgeLevel": str(self.knowledgelevel),
+                "Challenges": str(self.challenges)
+            },
+            "venue_id": str(venueid)
+        }
         #edit other user messages
         msgs = api.get_msgs(self.teamid, self.bot)
+        api.post_to_api_usr(e)
         if msgs:
             for msg in msgs:
                 #await msg.edit(embed=em, view=v)
