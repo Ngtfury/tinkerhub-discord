@@ -65,6 +65,7 @@ class InteractionHandler(commands.Cog):
             else:
                 await interaction.response.send_modal(Update1SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName'], mem['venueId']))
             return
+        #await interaction.response.defer()
 
 
 #submission modals
