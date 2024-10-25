@@ -56,9 +56,9 @@ class InteractionHandler(commands.Cog):
             custom_id = interaction.message.components[0].children[0].custom_id
             mem = api.get_member_from_did(interaction.user.id)
             if custom_id == 'submit1':
-                await interaction.response.send_modal(Update1SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName']))
+                await interaction.response.send_modal(Update1SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName'], mem['venueID']))
             else:
-                await interaction.response.send_modal(Update2SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName']))
+                await interaction.response.send_modal(Update2SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName'], mem['venueID']))
             return
 
 
@@ -83,10 +83,11 @@ class Update1SubmissionModal(discord.ui.Modal):
         placeholder="Select your project type {software/hardware}."
     )
 
-    def __init__(self, oldinteraction, bot, teamid = None, teamname=None) -> None:
+    def __init__(self, oldinteraction, bot, teamid, teamname, venue_id) -> None:
         super().__init__(title=f"Submit your response for {teamname}.", custom_id='update1submissionmodal')
         self.oldinteraction = oldinteraction
         self.teamid = teamid
+        self.venue_id = venue_id
     
 
     async def on_submit(self, interaction: discord.Interaction):
@@ -99,7 +100,8 @@ class Update1SubmissionModal(discord.ui.Modal):
                 "ProjectName": str(self.projectname),
                 "ProjectDescription": str(self.projectdescription),
                 "ProjectType": str(self.projecttype)
-            }
+            },
+            "venue_id": str(self.venue_id)
         }
 
         api.post_to_api_usr(e)
@@ -156,10 +158,11 @@ class Update2SubmissionModal(discord.ui.Modal):
         custom_id="challenges"
     )
 
-    def __init__(self, oldinteraction, teamid = None) -> None:
-        super().__init__(title="Submit your response.", custom_id='update2submissionmodal')
+    def __init__(self, oldinteraction, teamid, teamname, venue_id) -> None:
+        super().__init__(title=f"Submit your response, {teamname}", custom_id='update2submissionmodal')
         self.oldinteraction = oldinteraction
         self.teamid = teamid
+        self.teamname = teamname
 
     async def on_submit(self, interaction: discord.Interaction):
 
@@ -171,7 +174,8 @@ class Update2SubmissionModal(discord.ui.Modal):
                 "Stacks": str(self.stacks),
                 "KnowledgeLevel": str(self.knowledgelevel),
                 "Challenges": str(self.challenges)
-            }
+            },
+            "venue_id": str(self.venue_id)
         }
         api.post_to_api_usr(e)
         #await interaction.response.send_message(str(e))
