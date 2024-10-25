@@ -73,6 +73,8 @@ class BasicCommands(commands.Cog):
             for participants in _12hr_venues:
                 discordid = int(participants['dId'])
                 usr = self.bot.get_user(discordid)
+                if usr == None:
+                    continue
                 teamid = int(participants['teamId'])
                 d = api.is_second(teamid)
                 if d:
