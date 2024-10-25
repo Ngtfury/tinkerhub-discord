@@ -65,6 +65,7 @@ class BasicCommands(commands.Cog):
                 #await channel.send('hi', view=ModalView(channel))
 
 
+#automation
     @tasks.loop(minutes=30)
     async def _12hr_venues_task(self):
         _12hr_venues = api.get_4hr_venues()
@@ -73,14 +74,14 @@ class BasicCommands(commands.Cog):
                 discordid = int(participants['dId'])
                 usr = self.bot.get_user(discordid)
                 teamid = int(participants['teamId'])
-                d = api.get_msgs(teamid, self.bot)
-                if d['is_second']:
+                d = api.is_second(teamid)
+                if d:
                     return
                 em = discord.Embed(
                 color=0x2F3136,
                 description="Please submit your response here!"
                 )
-                msg = await usr.send(embed=em, view=ModalView1(usr))
+                msg = await usr.send(embed=em, view=ModalView1(participants))
                 json_ = {
                     'team_id': teamid,
                     'msg_ids': msg.id,
@@ -95,7 +96,6 @@ class BasicCommands(commands.Cog):
                 #if channel.last_message.content == "@everyone Hey its been above 12 hours":
                 #    return
                 #await channel.send('@everyone Hey its been above 12 hours')
-                
 
     @commands.command(name = 'startloop')
     @commands.is_owner()
@@ -103,6 +103,15 @@ class BasicCommands(commands.Cog):
         await ctx.send('Loop Started!')
         self.started_venues_task.start()
         
+
+
+    @commands.command(name='start12hrloop')
+    async def start12hrloop(self, ctx):
+        try:
+            self._12hr_task.start()
+            await ctx.send('Loop started')
+        except Exception as e:
+            await ctx.send(e)
 
     @commands.command(name = 'stoploop')
     @commands.is_owner()

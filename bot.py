@@ -28,7 +28,10 @@ class TestBot(commands.Bot):
         await self.load_extensions()
         print("Starting loops.")
         self.venue_task.start()
-        self._12hr_task.start()
+        #self._12hr_task.start()
         print('Loops Started')
         print('Bot ready.')
+
+    async def on_command_error(self, ctx, exception):
+        print(exception)
 
