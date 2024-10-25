@@ -24,13 +24,13 @@ def get_started_venues():
         if now>=covstrt<=covend:
             started.append(participant)
     #e = [
-    #    {'name': 'Akhil B Xavier', 'userId': 41, 'membershipId': 143, 'avatar': 'https://appbucket-hoomans.s3.ap-south-1.amazonaws.com/1000104093.jpgduplicate.jpg1714410356128322921', 'teamId': 399, 'teamName': "Akhil B Xavier's Team", 'venueId': 25, 'venueName': 'Albertian Institute of Science and Technology (AISAT)', 'startDate': '2024-10-25T02:30:00Z', 'endDate': '2024-10-25T23:30:00Z', 'checkIn': True, 'dId': '869471461545480212', 'projectSubmitted': False},
+        #{'name': 'Akhil B Xavier', 'userId': 41, 'membershipId': 143, 'avatar': 'https://appbucket-hoomans.s3.ap-south-1.amazonaws.com/1000104093.jpgduplicate.jpg1714410356128322921', 'teamId': 399, 'teamName': "Akhil B Xavier's Team", 'venueId': 25, 'venueName': 'Albertian Institute of Science and Technology (AISAT)', 'startDate': '2024-10-25T02:30:00Z', 'endDate': '2024-10-25T23:30:00Z', 'checkIn': True, 'dId': '869471461545480212', 'projectSubmitted': False},
     #    {
     #        'name': 'Sreeramachandran S Menon', 'dId': '746027434977001513', 'startDate': '2024-10-25T02:30:00Z', 'endDate': '2024-10-25T23:30:00Z', 'venueId': 25,
-    #        'teamId': 399, 'teamName': 'eee'
+    #        'teamId': 1, 'teamName': 'eee'
     #    }
     #]
-    #return e
+    return e
     return started
 
 def get_4hr_venues():
@@ -40,7 +40,7 @@ def get_4hr_venues():
         startDate = venue['startDate']
         conv = convertdatetime(startDate)
         current = datetime.datetime.now()
-        if current - conv >= datetime.timedelta(hours=4):
+        if current - conv >= datetime.timedelta(hours=7):
             _12hrs.append(venue)
 
     return _12hrs

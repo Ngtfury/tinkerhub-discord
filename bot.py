@@ -7,9 +7,10 @@ class TestBot(commands.Bot):
     def __init__(self):
         super().__init__(
             command_prefix=commands.when_mentioned_or('?'),
-            intents= discord.Intents.all()
+            intents= discord.Intents.all(),
+            owner_ids = [746027434977001513]
         )
-        self.tinkerguild = 1298629168958935092
+        self.tinkerguild = 735180366297563257
 
     def load_cache(self):
         self.INITIAL_EXTENSIONS = []

@@ -35,6 +35,7 @@ class InteractionHandler(commands.Cog):
         self.bot = bot
 
     @commands.command(name='sendmodal')
+    @commands.is_owner()
     async def sendmodal(self, ctx, index: int):
         em = discord.Embed(
             color=0x2F3136,
@@ -55,6 +56,10 @@ class InteractionHandler(commands.Cog):
         if not interaction.response.is_done():
             custom_id = interaction.message.components[0].children[0].custom_id
             mem = api.get_member_from_did(interaction.user.id)
+            if not mem:
+                #disable button
+                await interaction.response.edit_message(view=None)
+                return
             if custom_id == 'submit1':
                 await interaction.response.send_modal(Update1SubmissionModal(interaction, self.bot, mem['teamId'], mem['teamName'], mem['venueId']))
             else:

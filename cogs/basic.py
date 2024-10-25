@@ -13,6 +13,7 @@ class BasicCommands(commands.Cog):
         self.bot._12hr_task = self._12hr_venues_task
 
     @commands.command(name='synctree')
+    @commands.is_owner()
     async def synctree(self, ctx, guild = None):
         if guild == None:
             await self.bot.tree.sync()
@@ -32,22 +33,26 @@ class BasicCommands(commands.Cog):
             return
         if not started_venues == []:
             for participants in started_venues:
-                print(participants)
+                #print(participants)
                 discordid = int(participants['dId'])
                 teamid = int(participants['teamId'])
                 usr = self.bot.get_user(discordid)
                 d = api.get_msgs(teamid, self.bot)
+                #print(d)
                 if not d == []:
                     continue
                 em = discord.Embed(
                 color=0x2F3136,
                 description="Please submit your response here!"
                 )
+                #print('done1')
                 msg = await usr.send(embed=em, view=ModalView2(usr))
+                #print('done2')
                 json_ = {
                     'team_id': teamid,
                     'msg_ids': msg.id,
-                    'channel_id': msg.channel.id
+                    'channel_id': msg.channel.id,
+                    'is_second': False
                 }
                 api.post_to_api_msg(json_)
                 #update to api
@@ -68,7 +73,9 @@ class BasicCommands(commands.Cog):
                 discordid = int(participants['dId'])
                 usr = self.bot.get_user(discordid)
                 teamid = int(participants['teamId'])
-
+                d = api.get_msgs(teamid, self.bot)
+                if d['is_second']:
+                    return
                 em = discord.Embed(
                 color=0x2F3136,
                 description="Please submit your response here!"
@@ -77,7 +84,8 @@ class BasicCommands(commands.Cog):
                 json_ = {
                     'team_id': teamid,
                     'msg_ids': msg.id,
-                    'channel_id': msg.channel.id
+                    'channel_id': msg.channel.id,
+                    'is_second': True
                 }
                 api.post_to_api_msg(json_)
 
@@ -90,12 +98,14 @@ class BasicCommands(commands.Cog):
                 
 
     @commands.command(name = 'startloop')
+    @commands.is_owner()
     async def startloop(self, ctx):
         await ctx.send('Loop Started!')
         self.started_venues_task.start()
         
 
     @commands.command(name = 'stoploop')
+    @commands.is_owner()
     async def stoploop(self, ctx):
         await ctx.send('Loop Stopped!')
         self.started_venues_task.stop()
