@@ -1,4 +1,4 @@
-import requests
+#import requests
 import datetime
 import json
 import discord
