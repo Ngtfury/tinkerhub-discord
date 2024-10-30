@@ -50,6 +50,7 @@ def get_member_from_did(did):
     for participant in started:
         if participant['dId'] == str(did):
             return participant
+    return None
 
 def get_team_members(teamid):
     started = get_started_venues()

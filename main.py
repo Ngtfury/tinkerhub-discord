@@ -43,6 +43,5 @@ async def prepare(ctx: commands.Context):
 
 
 token = os.getenv("TOKEN")
-
 bot.run(token)
 
